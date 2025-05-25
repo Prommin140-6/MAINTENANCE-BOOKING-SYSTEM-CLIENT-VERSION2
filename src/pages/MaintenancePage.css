@@ -1,0 +1,121 @@
+.confirmation-modal .ant-modal-content {
+  background-color: #1f1f1f;
+  border: 2px solid #896253;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  max-width: 90%;
+  width: 300px;
+  margin: 0 auto;
+}
+
+.confirmation-modal .ant-modal-body {
+  padding: 16px;
+}
+
+.confirmation-modal h2 {
+  color: #CD9969;
+  text-align: center;
+  font-size: 1.25rem;
+}
+
+.confirmation-modal .maintenance-details {
+  background-color: #2a2a2a;
+  border: 1px solid #896253;
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 12px;
+}
+
+.confirmation-modal .maintenance-details p {
+  color: #CD9969;
+  margin: 6px 0;
+  font-size: 0.875rem;
+}
+
+.confirmation-modal .maintenance-details p span {
+  color: #8a7d5a;
+}
+
+.confirmation-modal .screenshot-notice {
+  background-color: #2a2a2a;
+  border: 1px solid #CD9969;
+  border-radius: 6px;
+  padding: 8px;
+  color: #CD9969;
+  font-weight: bold;
+  text-align: center;
+  font-size: 0.75rem;
+}
+
+.confirmation-modal .contact-info {
+  text-align: center;
+  color: #CD9969;
+  font-size: 0.75rem;
+}
+
+.confirmation-modal .contact-info p {
+  margin: 4px 0;
+}
+
+.confirmation-modal .contact-info a {
+  color: #CD9969;
+  font-weight: bold;
+}
+
+.confirmation-modal .contact-info a:hover {
+  color: #b3894f;
+}
+
+@media (max-width: 640px) {
+  .confirmation-modal .ant-modal-content {
+    width: 90%;
+    max-width: 280px;
+  }
+  .confirmation-modal h2 {
+    font-size: 1rem;
+  }
+  .confirmation-modal .maintenance-details p {
+    font-size: 0.75rem;
+  }
+  .confirmation-modal .screenshot-notice {
+    font-size: 0.7rem;
+  }
+  .confirmation-modal .contact-info {
+    font-size: 0.7rem;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .confirmation-modal .ant-modal-content {
+    width: 80%;
+    max-width: 350px;
+  }
+}
+
+/* สไตล์สำหรับปุ่มวันที่ */
+.date-button {
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.available-date {
+  background-color: #443833 !important;
+  color: #CD9969 !important;
+}
+
+.available-date:hover {
+  background-color: #5c4739 !important;
+}
+
+.selected-date {
+  background: linear-gradient(to bottom right, #CD9969, #896253) !important;
+  color: black !important;
+  border: 2px solid #CD9969 !important;
+  box-shadow: 0 0 0 2px rgba(205, 153, 105, 0.5) !important;
+}
+
+.full-date {
+  background-color: #9CA3AF !important;
+  color: white !important;
+  cursor: not-allowed !important;
+}
