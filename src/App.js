@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import MaintenancePage from './pages/MaintenancePage';
-import CheckStatusPage from './pages/CheckStatusPage'; // นำเข้า CheckStatusPage
+import CheckStatusPage from './pages/CheckStatusPage';
 import AdminPage from './pages/AdminPage';
 import LoginPage from './pages/LoginPage';
+import ManageDatesPage from './pages/ManageDatesPage'; // นำเข้า ManageDatesPage
 
 function App() {
   const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(!!localStorage.getItem('token'));
@@ -25,7 +26,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<MaintenancePage />} />
-        <Route path="/check-status" element={<CheckStatusPage />} /> {/* เพิ่มเส้นทางสำหรับ CheckStatusPage */}
+        <Route path="/check-status" element={<CheckStatusPage />} />
         <Route
           path="/admin/login"
           element={
@@ -36,6 +37,12 @@ function App() {
           path="/admin"
           element={
             isAdminAuthenticated ? <AdminPage /> : <Navigate to="/admin/login" />
+          }
+        />
+        <Route
+          path="/admin/manage-dates"
+          element={
+            isAdminAuthenticated ? <ManageDatesPage /> : <Navigate to="/admin/login" />
           }
         />
         <Route path="*" element={<Navigate to="/" />} />

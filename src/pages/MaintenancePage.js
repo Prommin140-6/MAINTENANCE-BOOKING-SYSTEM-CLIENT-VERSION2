@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Form, Input, message } from 'antd';
+import { Button, Form, Input, message, Select } from 'antd';
 import axios from 'axios';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -7,7 +7,9 @@ import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import Swal from 'sweetalert2';
 import logo from './ถึงแก่นLOGO.png';
 import './MaintenancePage.css';
-import ConfirmationModal from './ConfirmationModal'; // นำเข้า ConfirmationModal
+import ConfirmationModal from './ConfirmationModal';
+
+const { Option } = Select;
 
 const MaintenancePage = () => {
   const [form] = Form.useForm();
@@ -19,6 +21,7 @@ const MaintenancePage = () => {
   const [maintenanceDetails, setMaintenanceDetails] = useState(null);
   const [loading, setLoading] = useState(false);
   const [dateLoading, setDateLoading] = useState(true);
+  const [maintenanceTypes, setMaintenanceTypes] = useState([]);
 
   const today = new Date();
   const datesPerPage = 5;
@@ -32,7 +35,6 @@ const MaintenancePage = () => {
   const fetchBookedDates = async () => {
     try {
       const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/maintenance/booked-dates`);
-      console.log('Booked dates from server:', response.data.bookedDates);
       const bookedDatesArray = Array.isArray(response.data.bookedDates) ? response.data.bookedDates : [];
       setBookedDates(bookedDatesArray);
     } catch (error) {
@@ -44,8 +46,20 @@ const MaintenancePage = () => {
     }
   };
 
+  const fetchMaintenanceTypes = async () => {
+    try {
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/maintenance-types`);
+      setMaintenanceTypes(response.data);
+    } catch (error) {
+      console.error('Failed to load maintenance types:', error.response?.data || error.message);
+      message.error('ไม่สามารถดึงข้อมูลประเภทได้');
+      setMaintenanceTypes([]);
+    }
+  };
+
   useEffect(() => {
     fetchBookedDates();
+    fetchMaintenanceTypes();
   }, []);
 
   useEffect(() => {
@@ -68,21 +82,15 @@ const MaintenancePage = () => {
 
   const isDateFull = (date) => {
     const dateStr = date.toISOString().slice(0, 10);
-    const isFull = bookedDates.includes(dateStr);
-    console.log(`Checking if ${dateStr} is full:`, isFull);
-    return isFull;
+    return bookedDates.includes(dateStr);
   };
 
   const handleDateChange = (date) => {
     if (date && !isDateFull(date)) {
       setSelectedDate(date);
       const diffDays = Math.floor((date - today) / (1000 * 60 * 60 * 24));
-      if (diffDays < 0) {
-        setDateOffset(0);
-      } else {
-        const newOffset = Math.floor(diffDays / datesPerPage) * datesPerPage;
-        setDateOffset(newOffset);
-      }
+      const newOffset = Math.floor(diffDays / datesPerPage) * datesPerPage;
+      setDateOffset(newOffset);
       setShowDatePicker(false);
     } else if (isDateFull(date)) {
       message.error('วันที่นี้เต็มแล้ว กรุณาเลือกวันอื่น');
@@ -284,6 +292,23 @@ const MaintenancePage = () => {
             />
           </Form.Item>
 
+          <Form.Item
+            name="maintenanceType"
+            label={<span className="text-gray-400 font-semibold uppercase tracking-wider">ประเภทการตรวจสภาพ</span>}
+            rules={[{ required: true, message: 'กรุณาเลือกประเภทการตรวจสภาพ' }]}
+          >
+            <Select
+              placeholder="เลือกประเภท"
+              className="w-full rounded-lg border border-[#896253] bg-[#2a2a2a] text-[#CD9969] focus:ring-2 focus:ring-[#CD9969] focus:border-[#CD9969]"
+            >
+              {maintenanceTypes.map(type => (
+                <Option key={type._id} value={type.name}>
+                  {type.name}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+
           <Form.Item>
             <Button
               type="primary"
@@ -297,7 +322,7 @@ const MaintenancePage = () => {
 
           <Form.Item>
             <Button
-              href="/check-status" // ลิงก์ไปยังหน้า CheckStatusPage.js
+              href="/check-status"
               className="w-full rounded-lg bg-[#443833] hover:bg-[#5c4739] text-[#CD9969] border border-[#896253] px-4 py-2 text-sm font-semibold uppercase tracking-wider shadow-md hover:shadow-lg transition-all duration-300"
             >
               ไปหน้าเช็คสถานะ
