@@ -192,16 +192,20 @@ const AdminPage = () => {
       const payload = {
         preferredDate: newPreferredDate.toISOString().slice(0, 10),
         maintenanceType: selectedMaintenanceType,
-        status: 'accepted', // ยังคงส่ง status เพื่อป้องกันการหาย
+        status: 'accepted',
       };
-      console.log('Sending payload to PATCH:', payload); // Log payload ที่ส่งไป
+      console.log('Sending payload to PATCH:', payload);
 
       const response = await axios.patch(
         `${process.env.REACT_APP_API_URL}/api/maintenance/${selectedRequestId}`,
         payload,
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      console.log('Response from PATCH:', response.data); // Log response ที่ได้กลับมา
+      console.log('Response from PATCH:', response.data);
+
+      if (response.data.maintenanceType !== selectedMaintenanceType) {
+        message.warning('การอัปเดตประเภทไม่สำเร็จ กรุณาตรวจสอบกับผู้ดูแลระบบ');
+      }
 
       const updatedRequests = await fetchRequests();
       const updatedAcceptedRequests = updatedRequests.filter((r) => r.status === 'accepted');
@@ -367,7 +371,7 @@ const AdminPage = () => {
             break;
           case 'rejected':
             color = 'red';
-            icon = <CloseCircleOutlined />;
+            icon = <CheckCircleOutlined />;
             break;
           default:
             color = 'default';
@@ -511,14 +515,16 @@ const AdminPage = () => {
           />
         </Col>
         <Col xs={24} sm={8}>
-          <DatePicker
-            selected={filterDate}
-            onChange={handleDateFilter}
-            dateFormat="yyyy-MM-dd"
-            placeholderText="กรองวันที่สะดวก"
-            className="w-full rounded-lg border border-gray-300 p-2 date-picker"
-            isClearable
-          />
+          <div className="date-picker-wrapper">
+            <DatePicker
+              selected={filterDate}
+              onChange={handleDateFilter}
+              dateFormat="yyyy-MM-dd"
+              placeholderText="กรองวันที่สะดวก"
+              className="w-full rounded-lg border border-gray-300 p-2 date-picker"
+              isClearable
+            />
+          </div>
         </Col>
       </Row>
 
@@ -650,13 +656,19 @@ const AdminPage = () => {
       </Modal>
 
       <style jsx>{`
-        .date-picker {
-          z-index: 1000 !important;
+        .date-picker-wrapper {
           position: relative;
+          z-index: 2000; /* เพิ่ม z-index ให้สูงเพื่อให้ wrapper อยู่ด้านบน */
+        }
+        .react-datepicker-popper {
+          z-index: 2000 !important; /* กำหนด z-index ให้ปฏิทินโดยตรง */
+        }
+        .react-datepicker {
+          z-index: 2000 !important; /* กำหนด z-index ให้ตัวปฏิทิน */
         }
         .ant-table-wrapper {
           position: relative;
-          z-index: 1;
+          z-index: 1; /* รักษา z-index ของตารางให้ต่ำกว่าปฏิทิน */
         }
       `}</style>
     </div>
