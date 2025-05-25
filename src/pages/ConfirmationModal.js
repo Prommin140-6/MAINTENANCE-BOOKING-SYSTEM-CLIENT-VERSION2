@@ -64,16 +64,24 @@ const ConfirmationModal = ({ open, onClose, details }) => {
               </p>
             </div>
             <div className="screenshot-notice inline-flex items-center justify-center mt-3">
-              <CameraOutlined className="mr-1" /> {/* เปลี่ยน emoji เป็น CameraOutlined */}
-              <span>กรุณาแคปหน้าจอนี้เพื่อใช้เป็นหลักฐาน</span> {/* เปลี่ยน p เป็น span */}
+              <CameraOutlined className="mr-1" /> 
+              <span>กรุณาแคปหน้าจอนี้เพื่อใช้เป็นหลักฐาน</span> 
             </div>
             <div className="contact-info mt-3 text-center">
               <p>หากมีปัญหา กรุณาติดต่อที่:</p>
-              <p>
-                โทร: <a href="tel:0826595365" className="underline">082-659-5365</a> ,{' '}
-                <a href="tel:0636869999" className="underline">063-686-9999</a>
-              </p>
-              <p>
+
+              <div className="flex flex-col items-start justify-center mx-auto w-fit font-mono">
+                <div>
+                  <span className="inline-block w-[36px] text-left">โทร:</span> 
+                  <a href="tel:0826595365" className="underline">082-659-5365</a>
+                </div>
+                <div>
+                  <span className="inline-block w-[36px] text-left">&nbsp;</span>
+                  <a href="tel:0636869999" className="underline">063-686-9999</a>
+                </div>
+              </div>
+
+              <p className="mt-2">
                 LINE: <a href="https://line.me/R/ti/p/@259xpcyb" target="_blank" rel="noopener noreferrer" className="underline">@thuengkaen_th</a>
               </p>
             </div>
