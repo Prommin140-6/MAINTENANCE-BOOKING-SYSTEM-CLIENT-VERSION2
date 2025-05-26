@@ -4,10 +4,13 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import moment from 'moment';
-import 'moment/locale/th'; // นำเข้า locale ภาษาไทยสำหรับ moment
+import 'moment/locale/th';
 
 // ตั้งค่า locale เป็นภาษาไทย
 moment.locale('th');
+
+// กำหนด URL ของ Backend (เปลี่ยนเป็น URL ที่ deploy แล้ว)
+const API_BASE_URL = 'https://maintenance-booking-system-server.onrender.com'; // แทนที่ด้วย URL จริง
 
 const ManageDatesPage = () => {
   const navigate = useNavigate();
@@ -22,7 +25,7 @@ const ManageDatesPage = () => {
     }
 
     // ดึงวันที่ที่ถูกจองแล้ว
-    axios.get('http://localhost:5000/api/maintenance/booked-dates')
+    axios.get(`${API_BASE_URL}/api/maintenance/booked-dates`)
       .then(response => {
         const dates = Array.isArray(response.data) ? response.data : Array.isArray(response.data.bookedDates) ? response.data.bookedDates : [];
         setBookedDates(dates);
@@ -33,7 +36,7 @@ const ManageDatesPage = () => {
       });
 
     // ดึงวันที่ที่ถูกปิด
-    axios.get('http://localhost:5000/api/closed-dates')
+    axios.get(`${API_BASE_URL}/api/closed-dates`)
       .then(response => {
         const dates = Array.isArray(response.data) ? response.data : Array.isArray(response.data.closedDates) ? response.data.closedDates : [];
         setClosedDates(dates.map(cd => ({ ...cd, date: new Date(cd.date) })));
@@ -79,7 +82,7 @@ const ManageDatesPage = () => {
       }).then(async (result) => {
         if (result.isConfirmed) {
           try {
-            await axios.delete(`http://localhost:5000/api/closed-dates/${closedDate._id}`);
+            await axios.delete(`${API_BASE_URL}/api/closed-dates/${closedDate._id}`);
             setClosedDates(closedDates.filter(cd => cd._id !== closedDate._id));
             setBookedDates(bookedDates.filter(date => date !== dateString));
             Swal.fire('เปิดรับคิวสำเร็จ!', `เปิดรับคิววันที่ ${value.format('D MMMM YYYY')} สำเร็จ`, 'success');
@@ -101,7 +104,7 @@ const ManageDatesPage = () => {
       }).then(async (result) => {
         if (result.isConfirmed) {
           try {
-            const response = await axios.post('http://localhost:5000/api/closed-dates', {
+            const response = await axios.post(`${API_BASE_URL}/api/closed-dates`, {
               date: value.toISOString(),
             });
             setClosedDates([...closedDates, response.data]);
