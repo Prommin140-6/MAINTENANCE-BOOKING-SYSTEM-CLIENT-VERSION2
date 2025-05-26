@@ -1,8 +1,17 @@
 /* AdminPage.css */
 
-/* ตั้ง z-index ให้ DatePicker popup ให้แสดงอยู่บนสุด */
+/* ตั้ง z-index ให้ DatePicker popup ต่ำกว่า Modal */
 .react-datepicker-popper {
-  z-index: 1050 !important;
+  z-index: 2000 !important;
+}
+
+/* ตั้ง z-index ให้ Modal และ mask เพื่อให้อยู่เหนือ DatePicker */
+.modal-high-zindex .ant-modal {
+  z-index: 2100 !important;
+}
+
+.modal-high-zindex .ant-modal-mask {
+  z-index: 2099 !important;
 }
 
 /* ปรับขนาดปุ่มจัดการให้เล็กลง */

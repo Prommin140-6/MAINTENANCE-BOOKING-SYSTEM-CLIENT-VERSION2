@@ -7,6 +7,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import Swal from 'sweetalert2';
 import moment from 'moment';
+import './AdminPage.css'; // นำเข้าไฟล์ CSS
 
 const { confirm } = Modal;
 const { Option } = Select;
@@ -570,6 +571,7 @@ const AdminPage = () => {
         okText="บันทึก"
         cancelText="ยกเลิก"
         centered
+        wrapClassName="modal-high-zindex"
       >
         <Form form={typeForm} layout="vertical">
           <Form.Item
@@ -615,6 +617,7 @@ const AdminPage = () => {
         okText={editTypeId ? 'บันทึกการแก้ไข' : 'เพิ่มประเภท'}
         cancelText="ยกเลิก"
         centered
+        wrapClassName="modal-high-zindex"
       >
         <Form layout="vertical">
           <Form.Item
@@ -654,23 +657,6 @@ const AdminPage = () => {
           ))}
         </div>
       </Modal>
-
-      <style jsx>{`
-        .date-picker-wrapper {
-          position: relative;
-          z-index: 2000; /* เพิ่ม z-index ให้สูงเพื่อให้ wrapper อยู่ด้านบน */
-        }
-        .react-datepicker-popper {
-          z-index: 2000 !important; /* กำหนด z-index ให้ปฏิทินโดยตรง */
-        }
-        .react-datepicker {
-          z-index: 2000 !important; /* กำหนด z-index ให้ตัวปฏิทิน */
-        }
-        .ant-table-wrapper {
-          position: relative;
-          z-index: 1; /* รักษา z-index ของตารางให้ต่ำกว่าปฏิทิน */
-        }
-      `}</style>
     </div>
   );
 };
